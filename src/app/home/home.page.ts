@@ -1,3 +1,4 @@
+//home.page.ts
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  direccion:any;
+  colonia:any;
 
   constructor() {}
 
