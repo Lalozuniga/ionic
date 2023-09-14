@@ -9,6 +9,7 @@ import { Component } from '@angular/core';
 export class HomePage {
   direccion:any;
   colonia:any;
+  ciudad:any;
 
   constructor() {}
 
