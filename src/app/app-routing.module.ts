@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'lista-usuarios',
     loadChildren: () => import('./lista-usuarios/lista-usuarios.module').then( m => m.ListaUsuariosPageModule)
   },
+  {
+    path: 'directions-api',
+    loadChildren: () => import('./directions-api/directions-api.module').then( m => m.DirectionsApiPageModule)
+  },
 ];
 
 @NgModule({

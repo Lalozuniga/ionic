@@ -25,7 +25,6 @@ export class HomePage {
                 this.navcontroller.navigateRoot('/ListaUsuarios');
               }
 
-
   async mostrarMensaje (mensaje: string , titulo:string){
     const alerta = await this.alertController.create({
       header:titulo,
@@ -37,41 +36,33 @@ export class HomePage {
 
 
   async guardarFormulario(){
-    if(this.nombre == '' ||  this.apellidos=='' || this.direccion == '' || this.colonia == '' || this.ciudad == ''){
-      this.mostrarMensaje('te falta un campo de texto', 'mensaje')
-      return;
-    }
-
-
-
-
-    const databaseRef = firebase.database().ref('/formulario');
-    const idUnico = databaseRef.push().key;//esta linea genera un id inico para que si alguien tiene el mismo nombre no se actualize
-    if (idUnico){
-      const datos = {
-        direccion: this.direccion,
-        nombre: this.nombre,
-        colonia: this.colonia,
-        ciudad: this.ciudad,
-        apellidos: this.apellidos,
-      };
-      databaseRef.child(idUnico).set(datos).then(()=>{
-        this.mostrarMensaje('mi mensaje' , 'exito!');
-        console.log('Subido Exitosamente!')
-      });
+    try{
+      if(this.nombre == '' ||  this.apellidos=='' || this.direccion == '' || this.colonia == '' || this.ciudad == ''){
+        this.mostrarMensaje('te falta un campo de texto', 'mensaje')
+        return;
+      }
+      const databaseRef = firebase.database().ref('/formulario');
+      const idUnico = databaseRef.push().key;//esta linea genera un id inico para que si alguien tiene el mismo nombre no se actualize
+      if (idUnico){
+        const datos = {
+          direccion: this.direccion,
+          nombre: this.nombre,
+          colonia: this.colonia,
+          ciudad: this.ciudad,
+          apellidos: this.apellidos,
+        };
+        databaseRef.child(idUnico).set(datos).then(()=>{
+          this.mostrarMensaje('mi mensaje' , 'exito!');
+          console.log('Subido Exitosamente!')
+        }).catch((error)=>{
+          this.mostrarMensaje('error en la base de datos', 'chale')
+        });
+      }
+    
+    
+    
+    }catch(error){
+      this.mostrarMensaje('Ocurrio un error inesperado', 'error')
     }
   }
-  
-  async mandarmensaje(titulo:string, mensaje:string){
-    const alerta = await this.alertController.create({
-      //titulo
-      //cuerpo
-      //botones
-      header:titulo,
-      message:mensaje,
-      buttons:['cerrar']
-    });
-    await alerta.present();
-  }
-
 }
