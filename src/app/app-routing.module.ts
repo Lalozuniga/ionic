@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'directions-api',
     loadChildren: () => import('./directions-api/directions-api.module').then( m => m.DirectionsApiPageModule)
   },
+  {
+    path: 'creador-de-recetas',
+    loadChildren: () => import('./creador-de-recetas/creador-de-recetas.module').then( m => m.CreadorDeRecetasPageModule)
+  },
 ];
 
 @NgModule({

@@ -21,9 +21,12 @@ export class HomePage {
   constructor(private alertController: AlertController,
               private navcontroller:NavController) {}
 
-              navVista2(){
-                this.navcontroller.navigateRoot('/ListaUsuarios');
-              }
+  async navVista2(){
+      this.navcontroller.navigateRoot('/lista-usuarios');
+      }
+      async navVista1(){
+        this.navcontroller.navigateRoot('/creador-de-recetas');
+        }
 
   async mostrarMensaje (mensaje: string , titulo:string){
     const alerta = await this.alertController.create({
@@ -64,5 +67,8 @@ export class HomePage {
     }catch(error){
       this.mostrarMensaje('Ocurrio un error inesperado', 'error')
     }
+  }
+  async vistadirections(){
+    this.navcontroller.navigateRoot('/directions-api');
   }
 }
