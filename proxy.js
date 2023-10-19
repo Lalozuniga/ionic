@@ -3,6 +3,17 @@ const express = require('express');
 const axios = require('axios');
 const cors =  require('cors');
 const nodemailer = require('nodemailer');
+const ics = require('ics');
+
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./credenciales.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://db-api-en-tiempo-real-a1af2-default-rtdb.firebaseio.com"
+});
+
 
 
 const app = express();
@@ -62,4 +73,10 @@ app.post('/crearEvento',
         }catch(error){0
             res.status(500).send('error al enviar el correo')
         }
+    });
+    
+
+    app.get('/recibirReceta', async(req,res)=>{
+        //pedir una receta y regresar la informacion 
+
     });

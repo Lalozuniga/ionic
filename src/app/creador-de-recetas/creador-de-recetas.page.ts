@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
+import firebase from "firebase/app";
+import 'firebase/database';
 @Component({
   selector: 'app-creador-de-recetas',
   templateUrl: './creador-de-recetas.page.html',
@@ -50,8 +52,28 @@ export class CreadorDeRecetasPage implements OnInit {
       ingredientes:ingredientes,
       calorias:this.calorias,
     };
+    const referencia = firebase.database().ref('/recetas');
+    referencia.child(this.nombreReceta).set(datos).then(()=>{
+      this.limpieza();
+    }).catch((error)=>{
+      console.log(error);
+    });
   }
-
+  limpieza(){
+    this.nombreReceta= '';
+    this.calorias = '';
+    this.paso1 = '';
+    this.paso2 = '';
+    this.paso3 = '';
+    this.paso4 = '';
+    this.paso5 = '';
+    this.ingrediente1 = '';
+    this.ingrediente2 = '';
+    this.ingrediente3 = '';
+    this.ingrediente4 = '';
+    this.ingrediente5 = '';
+    
+  }
   ngOnInit() {
   }
 
