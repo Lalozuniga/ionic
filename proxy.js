@@ -4,7 +4,6 @@ const axios = require('axios');
 const cors =  require('cors');
 const nodemailer = require('nodemailer');
 const ics = require('ics');
-
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./credenciales.json");
@@ -78,5 +77,25 @@ app.post('/crearEvento',
 
     app.get('/recibirReceta', async(req,res)=>{
         //pedir una receta y regresar la informacion 
-
+        //leer elmparametro nombre de la URL
+        const nombreReceta = req.query.nombre;
+        //
+        if(!nombreReceta){
+            res.status(400).send('Se requiere un parametro');
+            //finaliza el programa
+            return;
+            //si encuentra informacion regresarla en formato json
+        }
+        //conectarse con firebase
+        const snapshot = await admin.database().ref(`/recetas/${nombreReceta}`).once('value');
+        if(!snapshot.exists()){
+            res.status(404).send('No existe el registro');
+            return;
+        }
+        else {
+            const data = snapshot.val();
+            res.json(data);
+        }
+        
     });
+  //  http://localhost:3000/recibirReceta?nombre=pozole
