@@ -23,6 +23,14 @@ const routes: Routes = [
     path: 'creador-de-recetas',
     loadChildren: () => import('./creador-de-recetas/creador-de-recetas.module').then( m => m.CreadorDeRecetasPageModule)
   },
+  {
+    path: 'consultor',
+    loadChildren: () => import('./consultor/consultor.module').then( m => m.ConsultorPageModule)
+  },
+  {
+    path: 'formulario',
+    loadChildren: () => import('./formulario/formulario.module').then( m => m.FormularioPageModule)
+  },
 ];
 
 @NgModule({

@@ -16,6 +16,10 @@ admin.initializeApp({
 
 const app = express();
 const port = 3000;
+app.listen(port, ()=>{
+    console.log(`proxy escuchado en el puerto ${port}`);
+});
+const db =admin.database();
 /* 
 app.use((req, res, next )=>{
     res.header('Access-Control-Allow-Origin','*');
@@ -44,9 +48,7 @@ app.get('/mi-proxy', (req, res)=>{
     console.log(`datos recibidos! ${direccion1}`)
 });
 
-app.listen(port, ()=>{
-    console.log(`proxy escuchado en el puerto ${port}`);
-});
+
 
 app.post('/crearEvento',
     async(req,res)=>{
@@ -218,55 +220,130 @@ app.delete('/tareaspendientes/:id', (req, res) => {
 
 //api vacia
 //CURl -X GET localhost:3000/elementos
+
 var tarea = [];
+
 app.get('/elementos', (req, res) => {
     res.json(tarea);
 });
-//CURL -X POST localhost:3000/elementos?receta=polloconsalsa
+
 app.post('/elementos', (req, res) => {
     var receta = req.query.receta;
     var votos = req.query.votos;
     const datos = {
-        id:Date.now(),
-        informacion:receta,
-        cantidad:votos,
-    };//<= asi indicamos que es un arreglo clave valor
-    tarea.push({...datos});
-    res.json('datos guardados')
+        id: Date.now(),
+        informacion: receta,
+        cantidad: votos,
+    };
+    tarea.push({ ...datos });
+    res.json('datos guardados');
 });
 
-//CURL -X PUT localhost:3000/elementos?id=0&informacion = si
 app.put('/elementos', (req, res) => {
-    const id = parseInt(req.params.id);
-    //aqui leemos en java '![]' significa false
-    //por lo tanto si el arreglo esta vacio entra en if
-    if(!id){
-        res.status(404).send('no hay informacion en el arreglo');
+    const id = parseInt(req.query.id);
+
+    if (!id) {
+        res.status(404).send('No hay información en el arreglo');
         return;
     }
-    
+
     var text = req.query.informacion;
 
-    // Verificar si el elemento con la ID dada existe antes de actualizarlo
-    if (tarea[id]) {
+    if (id >= 0 && id < tarea.length) {
         tarea[id].informacion = text || tarea[id].informacion;
-        res.send('actualizado correctamente');
+        res.send('Actualizado correctamente');
     } else {
         res.status(404).send('Elemento no encontrado');
     }
 });
 
-//CURL -X DELETE localhost:3000/elementos?id= aqui va la id de la anterior
-app.delete('/elementos', (req,res)=>{
-    var id = req.query.id;
+app.delete('/elementos', (req, res) => {
+    var id = parseInt(req.query.id);
     tarea = tarea.filter(tar => tar.id !== id);
-    res.send('eliminado')
+    res.send('Eliminado');
 });
 //luna
 app.get('/faselunar', async(req,res)=>{
     const id = req.query.id;//id
-    //const url 'https://api.farmsense.net/v1/moonphase
+    const url = `https://api.farmsense.net/v1/moonphases/?d=${id}`;
     const fecha = 125787192;
     //concatenar url + fecha
-    const respuesta = await axios;
+    const respuesta = await axios.get(url);
+    res.send(respuesta);
+});
+
+//api de apis
+//localhost:3000/consumir-api?nombre=sino
+app.get('/consumir-api', async(req, res) => {
+    try{
+        const api = req.query.nombre;
+        const numero = req.query.numero;
+            if (api == 'sino'){
+                const url = 'https://yesno.wtf/api';
+                const respuesta = await axios.get(url);
+                res.send(respuesta.data);
+            }
+            if(api = 'anime'){
+                const url = 'https://animechan.xyz/api/random';
+                const respuesta = await axios.get(url);
+                res.send(respuesta.data);
+            }
+            if(api = 'pokemon'){
+                const url = 'https://pokeapi.co/api';
+                const respuesta = await axios.get(url);
+                res.send(respuesta.data);
+            }
+            if(api = 'divisas'){
+                const url = 'https://api.frankfurter.app/latest?from=USD&to=EUR';
+                const respuesta = await axios.get(url);
+                res.send(respuesta.data);
+            }
+            if(api = 'rick'){
+                const url = `https://rickandmortyapi.com/api/character/${numero}`;
+                const respuesta = await axios.get(url);
+                res.send(respuesta.data);
+            }
+            if(api = ''){
+                const url = '';
+                const respuesta = await axios.get(url);
+                res.send(respuesta.data);
+            }
+            
+    }catch(e){
+        prospectosDataArray
+    }
+});
+//guardado de apis en firebase
+app.post('/agregarapis', async(req, res)=>{
+    const url = req.query.url;
+    const nombre = req.query.nombre;
+    const referencia = db.ref('apis');
+    const data = referencia.push();//agregar un nuevo valor a ref
+    const idUnico = data.key;//generar un key unico
+    const valores = {
+        key: idUnico,
+        url:url,
+        nombre:nombre,
+    };
+    data.set(valores).then(() => {
+        res.send('guardado exitosamente');
+    });
+});
+
+app.get('consultar-api', async(req, res)=>{
+    const nombreConsulta = req.query.nombre;
+    
+    const referencia = db.ref('apis');
+    referencia.once('value', (snapshot)=>{
+        snapshot.forEach((childSnapshot)=>{
+            const valores = childSnapshot.val();
+            if(nombreConsulta == valores.nombre){
+                res.send('Existe la URL');
+                return;
+            }else{
+                res.send('No existe la URL');
+            }
+        });
+    });
+    
 });
