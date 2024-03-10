@@ -317,6 +317,9 @@ app.get('/consumir-api', async(req, res) => {
 app.post('/agregarapis', async(req, res)=>{
     const url = req.query.url;
     const nombre = req.query.nombre;
+    if(!url || !nombre){
+        return;
+    }
     const referencia = db.ref('apis');
     const data = referencia.push();//agregar un nuevo valor a ref
     const idUnico = data.key;//generar un key unico
@@ -346,4 +349,8 @@ app.get('consultar-api', async(req, res)=>{
         });
     });
     
+});
+app.get('/consultar-api', async(req,res)=>{
+    const encryptData =req.query.petition;
+    res.send(decodeURIComponent(encryptData));
 });

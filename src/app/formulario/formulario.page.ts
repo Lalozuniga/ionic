@@ -6,10 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./formulario.page.scss'],
 })
 export class FormularioPage implements OnInit {
-
+  nombre:any;
+  url:any;
   constructor() { }
 
   ngOnInit() {
+  }
+  agregarApi(){
+    
   }
 
 }

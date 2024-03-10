@@ -10,15 +10,35 @@
       <ion-title size="large">consultor</ion-title>
     </ion-toolbar>
   </ion-header>
-
-
   <div>
     <ion-row>
       <ion-col *ngFor="let room  of rooms">
         <ion-input [id]="'miVariable'+room"></ion-input>
       </ion-col>
     </ion-row>
-    <ion-button (click)="agregarRoom()">+</ion-button>
-    <ion-button (click)="eliminarRoom()">-</ion-button>
+    <ion-col>
+      <ion-button (click)="agregarRoom()">+</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button (click)="eliminarRoom()">-</ion-button>
+    </ion-col>
+    <ion-input placeholder="Nombre"></ion-input>
+    <ion-button (click)="leerInputs()">consultar</ion-button>
+    <ion-row *ngFor="let room of rooms">
+    <ion-col>
+      <!-- Nombre de variables-->
+      <ion-item>
+        <ion-label position="floating">variables {{room}}</ion-label>
+        <ion-input [id]="'nombresvariables' + room"></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <!--* nombres de inputs -->
+      <ion-item>
+        <ion-label position="floating">input {{room}}</ion-label>
+        <ion-input [id]="'input' + room" ></ion-input>
+      </ion-item>
+    </ion-col>
+    </ion-row>
   </div>
 </ion-content>
